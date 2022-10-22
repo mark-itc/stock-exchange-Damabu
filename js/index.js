@@ -7,7 +7,7 @@ let limit = 10
 btn.onclick = () => {
     let url2 = url + searchInput.value + '&exchange=' + exchange + '&limit='  + limit 
 
-    let spinner = `<div class='text-center'><div class="spinner-border text-secondary mr-auto" role="status">
+    let spinner = `<div class='text-center'><div class="spinner-grow text-secondary mr-auto" role="status">
         <span class="visually-hidden">Loading...</span>
     </div></div>`
 
