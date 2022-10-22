@@ -16,6 +16,7 @@ async function showCompanyData (symbol){
     let name1 = document.getElementById("companyName")
     name1.innerHTML = spinner;
 
+
     let url = endpoint + symbol;
 
     let response = await fetch(url);
@@ -50,7 +51,7 @@ async function showCompanyData (symbol){
 
 async function showCompanyGraphic (symbol){
 
-    let name1 = document.getElementById("companyName")
+    let name1 = document.getElementById("companyGraphicHistorical")
     name1.innerHTML = spinner;
 
     let url = endpoint2 + symbol + "?serietype=line";
@@ -88,6 +89,8 @@ async function showCompanyGraphic (symbol){
         document.getElementById('myChart'),
         config
     );
+
+    name1.innerHTML = "Historical of "+ symbol;
 
 }
 
