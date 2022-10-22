@@ -1,3 +1,6 @@
+const params = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+});
 const timeout = 250;
 let searchInput = document.getElementById('search');
 let btn = document.getElementById('button')
@@ -5,12 +8,20 @@ let url = 'https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.co
 let exchange = 'NASDAQ'
 let limit = 10
 
+searchInput.value = params.query;
+showData();
+
+
 btn.onclick = () => {
     showData()
 }
 
 
 async function showData (){
+    
+    if(searchInput.value == ''){
+        return ;
+    }
 
     let url2 = url + searchInput.value + '&exchange=' + exchange + '&limit='  + limit 
 
@@ -36,12 +47,19 @@ async function showData (){
 
 
 
-
 searchInput.addEventListener('keyup', debounce(function(){
     showData()
 }, timeout));
 
+searchInput.addEventListener('keyup', function(){
+    updateUrl();
+} );
 
+
+function updateUrl(){
+    let searchvalue = searchInput.value;
+    history.pushState({},`Searching ${searchvalue}`, `index.html?query=${searchvalue}`)
+}
 
 function debounce(func, wait, immediate) {
     var timeout;
