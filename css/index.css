@@ -1,0 +1,26 @@
+.cssmarquee {
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px whitesmoke solid;
+}
+
+.cssmarquee div {
+    font-size: 1.2em;
+    position: absolute;
+    height: 100%;
+    margin: 0;
+    line-height: 50px;
+    text-align: center;
+    transform:translateX(100%);
+    animation: cssmarquee 35s linear infinite;
+}
+
+@keyframes cssmarquee {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
