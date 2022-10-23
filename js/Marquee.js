@@ -12,16 +12,13 @@ class Marquee {
         div.innerHTML = "Loading ... ";
 
         element.append(div)
-
-        this.init()
-    
+ 
     }
 
-    async init (){
+    async load (){
         let response = await fetch(this.endpoint);
         let data = await response.json();
 
-        console.log(data)
         let marqueecontent = data.map((val) => {
             return `<span style='color:gray'>${val.symbol}</span> $${val.price}  `
         }).join("")
