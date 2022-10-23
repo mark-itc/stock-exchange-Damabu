@@ -2,7 +2,6 @@ const params = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
 });
 const timeout = 250;
-const apikey = "57bf4f754e37c17f9bccc2dfe0fe18ee"
 let searchInput = document.getElementById('search');
 let btn = document.getElementById('button')
 let url = 'https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query='
@@ -138,21 +137,5 @@ function debounce(func, wait, immediate) {
     };
 };
 
-
-async function generateMarqueeString(){
-
-    let endpoint = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&sector=Technology&exchange=NASDAQ&dividendMoreThan=0&limit=100&apikey=${apikey}`
-    let response = await fetch(endpoint);
-    let data = await response.json();
-
-    let marqueecontent = data.map((val) => {
-        return `<span style='color:gray'>${val.symbol}</span> $${val.price}  `
-    }).join("")
-
-    let marquee1 = document.getElementById("marqueecontent")
-    marquee1.innerHTML = marqueecontent
-
-}
-
-
-generateMarqueeString();
+let marque1 = document.getElementById("m1")
+let m = new  Marquee(marque1)
