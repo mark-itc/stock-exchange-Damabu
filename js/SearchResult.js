@@ -8,6 +8,9 @@ class SearchResult {
     }
 
     renderResults(data_companies1){
+        this.params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
 
 
         let loading = document.getElementById('loading');
@@ -17,13 +20,14 @@ class SearchResult {
         var htmldata = data_companies1.map((el)=>{
 
             symbols_array.push(el.symbol)
-
-            return `<li class="list-group-item">
+            let str = `<li class="list-group-item">
                     <img id="${el.symbol}_img" style='max-height:30px;' src=''>
                     <a href="company.html?symbol=${el.symbol}">${el.name}</a>
                     <span style='font-size:12px; color:gray;'>(${el.symbol})</span>
                     <div id="${el.symbol}_percent" style='display:inline-block;'></div>
                 </li>`;
+            str = str.replace(this.params.query, `<span style='background:red;'>${this.params.query}</span>` )
+            return str;
         }).join('');
 
         let listahtml = `<ul class="list-group">${htmldata}</ul>`
@@ -76,7 +80,6 @@ class SearchResult {
     }
     
     showCompanyInfo(data){
-        console.log(data)
         let img = document.getElementById(data.symbol + "_img");
         img.src = data.profile.image;
     
@@ -87,6 +90,8 @@ class SearchResult {
         }else{
             percent.innerHTML = `<span style='color:red;'>${data.profile.changesPercentage}%</span>`
         }
+
+
                 
     }
 }

@@ -66,7 +66,7 @@ class SearchForm {
             let url = 'https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query='
             let url2 = url + form_input.value + '&exchange=NASDAQ&limit=10' 
         
-            let spinner = `<div class='text-center'><div class="spinner-border mr-auto" role="status">
+            let spinner = `<div class='text-center'><div class="spinner-grow text-secondary mr-auto" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div></div>`
         
