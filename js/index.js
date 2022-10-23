@@ -5,6 +5,7 @@ const timeout = 250;
 let searchInput = document.getElementById('search');
 let btn = document.getElementById('button')
 let url = 'https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/search?query='
+let url_company_profile = "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/";
 let exchange = 'NASDAQ'
 let limit = 10
 
@@ -20,10 +21,9 @@ btn.onclick = () => {
 async function showData (){
 
     if(searchInput.value == ''){
-        console.log("No hacemos nada por que no hay datos que mostrar")
+        console.log("Búsqueda vacía")
         return ;
     }
-
     let url2 = url + searchInput.value + '&exchange=' + exchange + '&limit='  + limit 
 
     let spinner = `<div class='text-center'><div class="spinner-grow text-secondary mr-auto" role="status">
@@ -34,53 +34,78 @@ async function showData (){
     result.innerHTML = spinner
 
     let response = await fetch(url2);
-    let data = await response.json();
+    let data_companies1 = await response.json();
 
-    console.log(data)
+    var symbols_array = [];
+    var htmldata = data_companies1.map((el)=>{
 
-    let htmldata = data.map((el)=>{
-        let promise = getCompanyInfo(el.symbol);
-
-        promise.then((data) => {
-            
-            let img = document.getElementById(data.symbol + "_img");
-            img.src = data.profile.image;
-
-            let percent = document.getElementById(data.symbol + "_percent");
-
-            if(data.profile.changesPercentage >= 0){
-                percent.innerHTML = `<span style='color:green;'>+${data.profile.changesPercentage}%</span>`
-            }else{
-                percent.innerHTML = `<span style='color:red;'>${data.profile.changesPercentage}%</span>`
-            }
-
-            
-
-
-        })
+        symbols_array.push(el.symbol)
 
         return `<li class="list-group-item">
-            <img id="${el.symbol}_img" style='max-height:30px;' src=''>
-            <a href="company.html?symbol=${el.symbol}">${el.name}</a>
-            <span style='font-size:12px; color:gray;'>(${el.symbol})</span>
-            <div id="${el.symbol}_percent" style='display:inline-block;'></div>
-        </li>`;
+                <img id="${el.symbol}_img" style='max-height:30px;' src=''>
+                <a href="company.html?symbol=${el.symbol}">${el.name}</a>
+                <span style='font-size:12px; color:gray;'>(${el.symbol})</span>
+                <div id="${el.symbol}_percent" style='display:inline-block;'></div>
+            </li>`;
     }).join('');
+
+
+    var slicedArray1 = symbols_array.slice(0, 3)
+    let promise1 = getPromiseCompanyInfo(slicedArray1.join(","))
+
+    var slicedArray2 = symbols_array.slice(3, 6)
+    let promise2 = getPromiseCompanyInfo(slicedArray2.join(","))
+
+    var slicedArray3 = symbols_array.slice(6, 9)
+    let promise3 = getPromiseCompanyInfo(slicedArray3.join(","))
+
+    var slicedArray4 = symbols_array.slice(9, 10)
+    let promise4 = getPromiseCompanyInfo(slicedArray4.join(","))
+
 
     let listahtml = `<ul class="list-group">${htmldata}</ul>`
     result.innerHTML = listahtml
+
+    Promise.all([promise1, promise2, promise3, promise4]).then((promises_data) => {        
+        
+        promises_data.forEach((data) => {
+            if(typeof data.companyProfiles != "undefined"){
+                data.companyProfiles.forEach((dataprofile) => {
+                    showCompanyInfo(dataprofile)
+                });
+            }else{
+                showCompanyInfo(data)
+            }
+        })
+          
+        
+    });
+
 }
 
-async function getCompanyInfo(symbol){
-    const endpoint = "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/";
+async function getPromiseCompanyInfo(symbols){
      
-    let url = endpoint + symbol;
-
+    let url = url_company_profile + symbols;
     let response = await fetch(url);
     let promise = await response.json();
 
     return promise;
 
+}
+
+function showCompanyInfo(data){
+
+    let img = document.getElementById(data.symbol + "_img");
+    img.src = data.profile.image;
+
+    let percent = document.getElementById(data.symbol + "_percent");
+
+    if(data.profile.changesPercentage >= 0){
+        percent.innerHTML = `<span style='color:green;'>+${data.profile.changesPercentage}%</span>`
+    }else{
+        percent.innerHTML = `<span style='color:red;'>${data.profile.changesPercentage}%</span>`
+    }
+            
 }
 
 searchInput.addEventListener('keyup', debounce(function(){
