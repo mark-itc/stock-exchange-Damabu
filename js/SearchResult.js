@@ -8,16 +8,14 @@ class SearchResult {
     }
 
     renderResults(data_companies1){
-        this.params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
+        this.params = new URLSearchParams(window.location.search)
 
 
         let loading = document.getElementById('loading');
         loading.innerHTML = ""
 
-        var symbols_array = [];
-        var htmldata = data_companies1.map((el)=>{
+        let symbols_array = [];
+        let htmldata = data_companies1.map((el)=>{
 
             symbols_array.push(el.symbol)
             let str = `<li class="list-group-item">
@@ -26,7 +24,7 @@ class SearchResult {
                     <span style='font-size:12px; color:gray;'>(${el.symbol})</span>
                     <div id="${el.symbol}_percent" style='display:inline-block;'></div>
                 </li>`;
-            str = str.replace(this.params.query, `<span style='background:red;'>${this.params.query}</span>` )
+            str = str.replace(this.params.get('query'), `<span style='background:red;'>${this.params.query}</span>` )
             return str;
         }).join('');
 
@@ -37,21 +35,21 @@ class SearchResult {
         (async () => {
             
 
-            var slicedArray1 = symbols_array.slice(0, 3)
+            let slicedArray1 = symbols_array.slice(0, 3)
             let promise1 = this.getPromiseCompanyInfo(slicedArray1.join(","))
 
-            var slicedArray2 = symbols_array.slice(3, 6)
+            let slicedArray2 = symbols_array.slice(3, 6)
             let promise2 = this.getPromiseCompanyInfo(slicedArray2.join(","))
 
-            var slicedArray3 = symbols_array.slice(6, 9)
+            let slicedArray3 = symbols_array.slice(6, 9)
             let promise3 = this.getPromiseCompanyInfo(slicedArray3.join(","))
 
-            var slicedArray4 = symbols_array.slice(9, 10)
+            let slicedArray4 = symbols_array.slice(9, 10)
             let promise4 = this.getPromiseCompanyInfo(slicedArray4.join(","))
 
 
             Promise.all([promise1, promise2, promise3, promise4]).then((promises_data) => {        
-                
+                console.log(promises_data)
                 promises_data.forEach((data) => {
                     if(typeof data.companyProfiles != "undefined"){
                         data.companyProfiles.forEach((dataprofile) => {

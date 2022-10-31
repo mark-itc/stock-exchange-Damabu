@@ -1,6 +1,4 @@
-const params = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-});
+const params = new URLSearchParams(window.location.search)
 
 const endpoint = "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/company/profile/";
 const endpoint2 = "https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/"
@@ -9,7 +7,7 @@ const spinner = `<div class="spinner-grow text-secondary mr-auto" role="status">
     <span class="visually-hidden">Loading...</span>
 </div>`
 
-let symbol = params.symbol;
+let symbol = params.get('symbol');
 
 async function showCompanyData (symbol){
 

@@ -1,9 +1,7 @@
 class SearchForm {
 
     constructor(element) {
-        this.params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
+        this.params = new URLSearchParams(window.location.search)
      
         this.timeout = 250;
         this.callback = null;
@@ -21,7 +19,7 @@ class SearchForm {
         input.setAttribute("type", "text")
         input.classList.add("form-control")
         input.classList.add("mr-sm-2")
-        input.value = this.params.query
+        input.value = this.params.get('query')
 
 
         let button = document.createElement("button")
